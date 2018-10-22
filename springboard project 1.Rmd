@@ -1,0 +1,89 @@
+---
+title: "Project1 Springboard"
+author: "J. Handzel"
+date: "October 19, 2018"
+output: html_document
+---
+##options(repos="https://cran.rstudio.com" )
+##{r setup, include=FALSE}
+##knitr::opts_chunk$set(echo = TRUE)
+
+install.packages("tidyverse")
+install.packages("fastDummies")
+
+
+## Clean up data
+
+```{r}
+
+library(tidyverse)
+library(fastDummies)
+
+#The knitting process process happens in a different environment; so you need to save the data object from your workspace to a file and then load it in a code chunk.
+
+#So with refine_original in your workspace, in the console save to a .RData file:
+
+#save(refine_original, file="refine_original.RData")
+
+#Then, in a code chunk in the R Markdown file, load the data from the file:
+
+
+load(file="refine_original.RData")
+
+toys <- refine_original
+print(toys)
+##1: Clean up brand names
+#Clean up the 'company' column so all of the misspellings of the brand names are standardized. For example, you can transform the values in #the column to be: philips, akzo, van houten and unilever (all lowercase).
+
+companyvec <- as.vector(toys[['company']])
+
+cleancompanyvec <- recode(companyvec, "Phillips" = "philips", "phillips" = "philips", "phillipS" = "philips", "phillps" = "philips","fillips" = "philips", "phlips" = "philips", "phllips" = "philips", "Akzo" = "akzo", "AKZO" = "akzo", "akz0" = "akzo","ak zo" = "akzo","unilver" = "unilever", "Unilever" = "unilever", "Van Houten" = "van_houten", "van Houten" = "van_houten", "van houten" = "van_houten") -> toys[['company']]
+
+##2: Separate product code and number
+#Separate the product code and product number into separate columns i.e. add two new columns called product_code and product_number
+toys %>%
+ separate("Product code / number", c("product_code", "product_number"), "-") -> toys
+ 
+##3: Add product categories
+#p = Smartphone v = TV x = Laptop q = Tablet
+toys$product_category <- toys$product_code
+
+toynames <- as.vector(toys[['product_category']])
+
+cleantoynames <- recode(toynames, "p"="smartphone","v" = "TV", "x" = "Laptop","q" = "Tablet") -> toys[['product_category']]
+
+##4: Add full address for geocoding. Create a new column full_address that concatenates the three address fields (address, city, country), separated by commas.
+# columns to paste together
+cols <- c( 'address' , 'city' , 'country' )
+# create a new column `x` with the three columns collapsed together
+toys$geocolumn <- apply( toys[ , cols ] , 1 , paste , collapse = "," )
+# remove the unnecessary columns
+toys <- toys[ , !( names( toys ) %in% cols ) ]
+toys$company <- as.factor(toys[['company']])
+
+##5: Create dummy variables for company and product category
+#Add four binary (1 or 0) columns for company: company_philips, company_akzo, company_van_houten and company_unilever.
+#Add four binary (1 or 0) columns for product category: product_smartphone, product_tv, product_laptop and product_tablet.
+
+resulthold <- dummy_cols(toys, select_columns = c("company"))
+results <- dummy_cols(resulthold, select_columns = c("product_category"))
+
+names(results)[names(results) == "product_category_TV"] <- "product_tv"
+names(results)[names(results) == "product_category_smartphone"] <- "product_smartphone"
+names(results)[names(results) == "product_category_Laptop"] <- "product_laptop"
+names(results)[names(results) == "product_category_Tablet"] <- "product_tablet"
+
+print.data.frame(results)
+
+write.csv(results, file = "refine_clean.csv")
+
+
+
+
+
+```
+
+
+
+
+

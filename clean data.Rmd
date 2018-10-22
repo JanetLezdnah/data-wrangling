@@ -1,0 +1,87 @@
+---
+title: "Clean Data"
+author: "J. Handzel"
+date: "October 14, 2018"
+output: html_document
+---
+##options(repos="https://cran.rstudio.com" )
+##{r setup, include=FALSE}
+##knitr::opts_chunk$set(echo = TRUE)
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+p = Smartphone
+
+v = TV
+
+x = Laptop
+
+q = Tablet c("p" = "Smartphone", "v" = "TV", "x" = "Laptop","q" = "Tablet")
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+install.packages("tidyverse")
+library(tidyverse)
+toyproducts <- cbind(toyssep, product_category=rep(toyssep[ ,2])) 
+cattoys <- toyproducts[["product_category"]]
+mutate(toyproducts)
+
+```{r toys}
+
+toys(stingsAsFactors = FALSE) <- refine...Sheet1toys
+toys$Conc <- apply(toys[,-1],1,paste,collapse="")
+head(conc)
+
+
+toyssep3 <- toys %>%
+  separate(Product.code...number, c("product_code", "product_number"), "-")
+toyssep3$product_hold <- as.character(toyssep3$product_code)
+head(toyssep3)
+stuff <- toyssep3$product_hold %>%
+  str_replace_all(c("p"="smartphone","v" = "TV", "x" = "Laptop","q" = "Tablet")) %>%
+  cbind(toyssep3,stuff) %>%
+   {. ->> b } %>%   #here is save
+   summary()
+   head(b)
+
+toys %>%
+    paste("address", "city", "country", sep = " ")
+head(toys)
+
+toys$Conc <- apply(toys[,-1],1,paste,collapse="")
+head(toys)
+
+cleantoys <- data.frame(toys)
+cleantoys$company <- NULL
+
+
+companyvec <- toys[ ,1] 
+
+companyvec %>%
+  str_replace_all(c("Phillips" = "philips", "phillips" = "philips", "phillipS" = "philips", "phillps" = "philips","fillips" = "philips", "phlips" = "philips", "phllips" = "philips")) %>%
+  str_replace_all(c("Akzo" = "akzo", "AKZO" = "akzo", "akz0" = "akzo","ak zo" = "akzo")) %>%
+  str_replace_all(c("Van Houten" = "van houten", "van Houten" = "van houten")) %>% 
+  str_replace_all(c("unilver" = "unilever", "Unilever" = "unilever")) %>%
+  cbind(cleantoys, companyvec)
+  
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+```
+
+
